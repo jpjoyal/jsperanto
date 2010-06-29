@@ -1,6 +1,2 @@
-license
- * file header
- * 
-
 Tests
  * init options
