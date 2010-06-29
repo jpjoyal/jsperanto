@@ -1,0 +1,38 @@
+{
+	"sections" : {
+		"home" : "Home",
+		"files" : "My Files"
+	},
+	"product" : {
+		"name" : "jsperanto"
+	},
+	"withHTML" : "<b>this would be bold</b>",
+	"withreuse" : "$t(product.name) and $t(sections.home)",
+	"withreplacement" : "since __year__",
+	"4" : {
+		"level" : {
+			"of" : {
+				"nesting": "4 level of nesting"
+			}
+		}
+	},
+	"pluralversionexist" : "singular version of pluralversionexist",
+	"pluralversionexist_plural" : "plural version of pluralversionexist",
+	"pluralversiondoesnotexist" : "plural version does not exist",
+	"count and replacement" : "you have __count__ friend", 
+	"count and replacement_plural" : "you have __count__ friends",
+	
+	"infinite" : "infinite $t(recursion)",
+	"recursion" : "recursion $t(infinite)",
+	"project" : {
+		"name" : "jsperanto",
+		"store" : "JSON",
+		"size" : {
+			"source" : "$t(project.name) is __value__ __unit__",
+			"min" : "$t(project.size.source) when minified",
+			"gzip" : "$t(project.size.min) and gzipped"
+		}
+	},
+	"can_speak" : "I can only speak one language",
+ 	"can_speak_plural" : "I can speak __count__ languages"
+}
