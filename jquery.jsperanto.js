@@ -120,9 +120,9 @@
 						i = 0;
 						value = dictionary;
 
-				        while (keys[i]) {
+						while (keys[i]) {
 
-				            value = value && value[keys[i]];
+							value = value && value[keys[i]];
 							i += 1;
 
 						}
@@ -130,7 +130,6 @@
 						if (value) {
 
 							value = applyReplacement(value, options);
-
 							index_of = "indexOf";
 
 							while ((index_of_opening = value[index_of](o.reusePrefix)) !== -1) {
