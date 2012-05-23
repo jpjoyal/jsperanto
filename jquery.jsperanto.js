@@ -5,7 +5,9 @@
 	var o = {};
     o.interpolationPrefix = '__';
     o.interpolationSuffix = '__';
-    o.pluralSuffix = "_plural";
+    o.aboveOneSuffix = '_aboveOne';
+    o.exactlyOneSuffix = '_exactlyOne';
+    o.belowOneSuffix = '_belowOne';
     o.maxRecursion = 50; //used while applying reuse of strings to avoid infinite loop
     o.reusePrefix = "$t(";
     o.reuseSuffix = ")";
@@ -15,7 +17,7 @@
     o.setDollarT = true; // $.t aliases $.jsperanto.translate, nice shortcut
     o.dictionary = false; // to supply the dictionary instead of loading it using $.ajax. A (big) javascript object containing your namespaced translations
 	o.lang = false; //specify a language to use
-	o.pluralNotFound = ["plural_not_found_", Math.random()].join(''); // used internally by translate
+	o.suffixNotFound = ["suffix_not_found_", Math.random()].join(''); // used internally by translate
 	
 	var dictionary = false; //not yet loaded
 	var currentLang = false;
@@ -59,11 +61,19 @@
 			return o.fallbackLang;
 		}
 	}
-	
-	function needsPlural(options){
-		return (options.count && typeof options.count != 'string' && options.count > 1);
+
+	function containsCount(options){
+	   return (typeof options.count != 'undefined');
 	}
-	
+
+	function getCountSuffix(options) {
+	   if (!isNaN(options.count)) {
+	      return (options.count > 1) ? o.aboveOneSuffix : (options.count < 1) ? o.belowOneSuffix : o.exactlyOneSuffix;
+	   }
+      else {
+         return o.aboveOneSuffix;
+      }
+   }
 
 	function translate(dottedkey,options){
 		count_of_replacement = 0;
@@ -78,14 +88,14 @@
 		options = options || {};
 		var notfound = options.defaultValue || dottedkey;
 		if(!dictionary){return notfound;} // No dictionary to translate from
-		
-		if(needsPlural(options)){
+
+		if(containsCount(options)){
 			var optionsSansCount = $.extend({},options);
 			delete optionsSansCount.count;
-			optionsSansCount.defaultValue = o.pluralNotFound;
-			var pluralKey = dottedkey + o.pluralSuffix;
-			var translated = translate(pluralKey,optionsSansCount);
-			if(translated != o.pluralNotFound){
+			optionsSansCount.defaultValue = o.suffixNotFound;
+			var suffixKey = dottedkey + getCountSuffix(options);
+			var translated = translate(suffixKey,optionsSansCount);
+			if(translated != o.suffixNotFound){
 				return applyReplacement(translated,{count:options.count});//apply replacement for count only
 			}// else continue translation with original/singular key
 		}

@@ -21,7 +21,7 @@ Usage example
 		
 		$.t('can_speak',{count:1}); //-> "I can only speak one language"
 		$.t('can_speak',{count:3}); //-> "I can speak 3 languages"
-		$.t('can_speak_plural',{count:'any'}); //-> "I can speak any languages"
+		$.t('can_speak_aboveOne',{count:'any'}); //-> "I can speak any languages"
 		
 		$.t('project.size.source',{value:4,unit:"kb"}); //-> "jsperanto is 4 kb"
 		$.t('project.size.min',{value:1727,unit:"bytes"}) //-> "jsperanto is 1727 bytes when minified"
@@ -40,7 +40,7 @@ Usage example
 			}
 		},
 		"can_speak" : "I can only speak one language",
-	 	"can_speak_plural" : "I can speak __count__ languages"
+	 	"can_speak_aboveOne" : "I can speak __count__ languages"
 	}
 
 API
@@ -54,9 +54,11 @@ initialize jsperanto by loading the dictionary, calling back when ready
 
 **options** extends these defaults
 
-	o.interpolationPrefix = '__'; 
+	o.interpolationPrefix = '__';
 	o.interpolationSuffix = '__';
-	o.pluralSuffix = "_plural"; 
+   o.aboveOneSuffix = '_aboveOne';
+   o.exactlyOneSuffix = '_exactlyOne';
+   o.belowOneSuffix = '_belowOne';
 	o.maxRecursion = 50; //used while applying reuse of strings to avoid infinite loop
 	o.reusePrefix = "$t("; //nested lookup prefix
 	o.reuseSuffix = ")"; //nested lookup suffix
@@ -79,7 +81,7 @@ looks up the key in the dictionary applying plural, interpolation & nested looku
 
 **options** each prop name are are used for interpolation
 
-**options.count** special prop that indicates to retrieve the plural version (**key**_plural) if its greater than 1. Also used for interpolation
+**options.count** special prop that indicates to retrieve the counted version (**key**_aboveOne, _exactlyOne, _belowOne). Also used for interpolation
 
 **options.defaultValue** specify default value if the key can't be resolved (the key itself will be sent back if no defaultValue is provided)
 
