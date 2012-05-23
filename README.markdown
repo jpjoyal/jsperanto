@@ -21,7 +21,7 @@ Usage example
 		
 		$.t('can_speak',{count:1}); //-> "I can only speak one language"
 		$.t('can_speak',{count:3}); //-> "I can speak 3 languages"
-		$.t('can_speak_aboveOne',{count:'any'}); //-> "I can speak any languages"
+		$.t('can_speak',{count:'any'}); //-> "I can speak any languages"
 		
 		$.t('project.size.source',{value:4,unit:"kb"}); //-> "jsperanto is 4 kb"
 		$.t('project.size.min',{value:1727,unit:"bytes"}) //-> "jsperanto is 1727 bytes when minified"
