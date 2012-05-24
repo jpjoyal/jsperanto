@@ -15,21 +15,21 @@ Depends on jQuery 1.3.2+ (uses $.ajax, $.each, $.extend)
 Usage example
 =============
 
-   $.jsperanto.init(function(t){
-       t('project.name'); //-> "jsperanto"
-      $.t('project.store'); //-> "JSON"
+    $.jsperanto.init(function(t){
+        t('project.name'); //-> "jsperanto"
+        $.t('project.store'); //-> "JSON"
+        
+        $.t('can_speak',{count:1}); //-> "I can only speak one language"
+        $.t('can_speak',{count:3}); //-> "I can speak 3 languages"
+        $.t('can_speak_plural',{count:'any'}); //-> "I can speak any languages"
       
-      $.t('can_speak',{count:1}); //-> "I can only speak one language"
-      $.t('can_speak',{count:3}); //-> "I can speak 3 languages"
-      $.t('can_speak_plural',{count:'any'}); //-> "I can speak any languages"
-      
-      $.t('project.size.source',{value:4,unit:"kb"}); //-> "jsperanto is 4 kb"
-      $.t('project.size.min',{value:1727,unit:"bytes"}) //-> "jsperanto is 1727 bytes when minified"
-      $.t('project.size.gzip',{value:833,unit:"bytes"}) //-> "jsperanto is 833 bytes when minified and gzipped"
-   });
+        $.t('project.size.source',{value:4,unit:"kb"}); //-> "jsperanto is 4 kb"
+        $.t('project.size.min',{value:1727,unit:"bytes"}) //-> "jsperanto is 1727 bytes when minified"
+        $.t('project.size.gzip',{value:833,unit:"bytes"}) //-> "jsperanto is 833 bytes when minified and gzipped"
+    });
 
-   //given this dictionary
-   {
+    //given this dictionary
+    {
       "project" : {
          "name" : "jsperanto",
          "store" : "JSON",
@@ -41,7 +41,7 @@ Usage example
       },
       "can_speak" : "I can only speak one language",
       "can_speak_plural" : "I can speak __count__ languages"
-   }
+    }
 
 API
 ===
@@ -54,23 +54,23 @@ initialize jsperanto by loading the dictionary, calling back when ready
 
 **options** extends these defaults
 
-   o.interpolationPrefix = '__'; 
-   o.interpolationSuffix = '__';
-   o.pluralSuffix = "_plural";
-   o.getSuffixMethod = function(count){ return ( count > 1 || typeof(count) == "string" )  ? o.pluralSuffix : ""; };
-   o.maxRecursion = 50; //used while applying reuse of strings to avoid infinite loop
-   o.reusePrefix = "$t("; //nested lookup prefix
-   o.reuseSuffix = ")"; //nested lookup suffix
-   o.fallbackLang = 'en-US'; // see Language fallback section
-   o.dicoPath = 'locales'; // see Dictionary section
-   o.keyseparator = "."; // keys passed to $.jsperanto.translate use this separator
-   o.setDollarT = true; // $.t aliases $.jsperanto.translate, nice shortcut
-   o.dictionary = false; // to supply the dictionary instead of loading it using $.ajax. A (big) javascript object containing your namespaced translations
-   o.lang = false; //specify a language to use i.e en-US
+    o.interpolationPrefix = '__'; 
+    o.interpolationSuffix = '__';
+    o.pluralSuffix = "_plural";
+    o.getSuffixMethod = function(count){ return ( count > 1 || typeof(count) == "string" )  ? o.pluralSuffix : ""; };
+    o.maxRecursion = 50; //used while applying reuse of strings to avoid infinite loop
+    o.reusePrefix = "$t("; //nested lookup prefix
+    o.reuseSuffix = ")"; //nested lookup suffix
+    o.fallbackLang = 'en-US'; // see Language fallback section
+    o.dicoPath = 'locales'; // see Dictionary section
+    o.keyseparator = "."; // keys passed to $.jsperanto.translate use this separator
+    o.setDollarT = true; // $.t aliases $.jsperanto.translate, nice shortcut
+    o.dictionary = false; // to supply the dictionary instead of loading it using $.ajax. A (big) javascript object containing your namespaced translations
+    o.lang = false; //specify a language to use i.e en-US
 
 Use init to switch language too :  
 
-   $.jsperanto.init(someMethod,{lang:"fr"})
+    $.jsperanto.init(someMethod,{lang:"fr"})
 
 **$.jsperanto.translate(key,options)**
 
@@ -91,7 +91,7 @@ Dictionary loading
 
 Using defaults, jsperanto uses a basic browser language detection
 
-   (navigator.language) ? navigator.language : navigator.userLanguage
+    (navigator.language) ? navigator.language : navigator.userLanguage
 
 to determine what dictionary file to load. You can also instruct jsperanto to load a specific language (via init option _lang_). 
 
@@ -104,7 +104,7 @@ Switching language
 
 Simply use init again and specify a language (or dictionary) to use.
 
-   $.jsperanto.init(someMethod,{lang:"fr"})
+    $.jsperanto.init(someMethod,{lang:"fr"})
 
 Custom suffixes
 ==================
@@ -112,7 +112,7 @@ Custom suffixes
 At init time you can specify a method which will calculate the suffix to use if count is present. the argument passed to this method is the count and can be a string or number.
 Anything other than a string returned will be disregarded.
 
-   $.jsperanto.init(someMethod, {
+    $.jsperanto.init(someMethod, {
       lang:"en-us",
       getSuffixMethod : function(count){
          if ( count == 0 ) {
@@ -122,7 +122,7 @@ Anything other than a string returned will be disregarded.
             return "_plural";
          }
       }
-   )
+    )
 
 Licence
 =======
