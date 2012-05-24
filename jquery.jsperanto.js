@@ -1,13 +1,14 @@
 //jquery 1.3.2 dependencies  : $.each, $.extend, $.ajax
 
 (function($) {
+   
 	//defaults
+	
 	var o = {};
     o.interpolationPrefix = '__';
     o.interpolationSuffix = '__';
-    o.aboveOneSuffix = '_aboveOne';
-    o.exactlyOneSuffix = '_exactlyOne';
-    o.belowOneSuffix = '_belowOne';
+    o.pluralSuffix = '_plural';
+    o.getSuffixMethod = false;
     o.maxRecursion = 50; //used while applying reuse of strings to avoid infinite loop
     o.reusePrefix = "$t(";
     o.reuseSuffix = ")";
@@ -22,6 +23,7 @@
 	var dictionary = false; //not yet loaded
 	var currentLang = false;
 	var count_of_replacement = 0;
+
 	
 	function init(callback,options){
 		$.extend(o,options);
@@ -32,7 +34,7 @@
 			callback(translate);
 		});
 	}
-	
+
 	function applyReplacement(string,replacementHash){
 		$.each(replacementHash,function(key,value){
 			string = string.replace([o.interpolationPrefix,key,o.interpolationSuffix].join(''),value);
@@ -63,23 +65,25 @@
 	}
 
 	function containsCount(options){
-	   return (typeof options.count != 'undefined');
+	   return (typeof options.count == 'number' || typeof options.count == 'string');
+	}
+
+	function getDefaultSuffix(count){
+      if ( count > 1 || typeof(count) == "string" ) {
+         return o.pluralSuffix;
+      }
 	}
 
 	function getCountSuffix(options) {
-	   if (!isNaN(options.count)) {
-	      return (options.count > 1) ? o.aboveOneSuffix : (options.count < 1) ? o.belowOneSuffix : o.exactlyOneSuffix;
-	   }
-      else {
-         return o.aboveOneSuffix;
-      }
+	   var suffix = ( typeof(o.getSuffixMethod) == "function" ) ? o.getSuffixMethod(options.count) : getDefaultSuffix(options.count);
+	   return ( typeof(suffix) == "string" ) ? suffix : '';
    }
 
 	function translate(dottedkey,options){
 		count_of_replacement = 0;
 		return _translate(dottedkey,options);
 	}
-	
+
 	/*
 	options.defaultValue
 	options.count
@@ -142,7 +146,7 @@
 	function lang(){
 		return currentLang;
 	}
-	
+
 	$.jsperanto = $.jsperanto || {
 		init:init,
 		t:translate,
