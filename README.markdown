@@ -57,7 +57,7 @@ initialize jsperanto by loading the dictionary, calling back when ready
    o.interpolationPrefix = '__'; 
    o.interpolationSuffix = '__';
    o.pluralSuffix = "_plural";
-   o.getSuffixMethod = function(count){ return "_foo"; } // A custom method to calculate the suffix if language rules differ
+   o.getSuffixMethod = function(count){ return ( count > 1 || typeof(count) == "string" )  ? o.pluralSuffix : ""; };
    o.maxRecursion = 50; //used while applying reuse of strings to avoid infinite loop
    o.reusePrefix = "$t("; //nested lookup prefix
    o.reuseSuffix = ")"; //nested lookup suffix
