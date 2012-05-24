@@ -109,16 +109,16 @@ Simply use init again and specify a language (or dictionary) to use.
 Custom suffixes
 ==================
 
-At init time you can specify a method which will calculate the suffic to use if count is present. the argument passed to this method is the count and can be a string or number.
+At init time you can specify a method which will calculate the suffix to use if count is present. the argument passed to this method is the count and can be a string or number.
 Anything other than a string returned will be disregarded.
 
    $.jsperanto.init(someMethod, {
       lang:"en-us",
       getSuffixMethod : function(count){
-         if ( count === 0 ) {
+         if ( count == 0 ) {
             return "_zero";
          }
-         if ( count !== 1 ) {
+         if ( count != 1 ) {
             return "_plural";
          }
       }
