@@ -31,7 +31,6 @@ asyncTest("translation", function() {
       t('infinite');
       equals(true,true,"recursive nested lookup should not crash");
 
-      start();
     },o);
 
     o.getSuffixMethod = function(count){
@@ -52,6 +51,7 @@ asyncTest("translation", function() {
       equals(t('countCustomSuffix',{count:"string"}),"I have many. The count is string");
       equals(t('countCustomSuffix',{count:"1"}),"I have exactly one. The count is 1");
       equals(t('countCustomSuffix',{count:"01"}),"I have exactly one. The count is 01");
+      start();
     },o);
 });
 
