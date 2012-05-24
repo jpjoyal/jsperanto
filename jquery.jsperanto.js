@@ -8,7 +8,7 @@
     o.interpolationPrefix = '__';
     o.interpolationSuffix = '__';
     o.pluralSuffix = '_plural';
-    o.getSuffixMethod = false;
+    o.getSuffixMethod = function(count){ return ( count > 1 || typeof(count) == "string" )  ? o.pluralSuffix : ""; };
     o.maxRecursion = 50; //used while applying reuse of strings to avoid infinite loop
     o.reusePrefix = "$t(";
     o.reuseSuffix = ")";
@@ -68,14 +68,8 @@
 	   return (typeof options.count == 'number' || typeof options.count == 'string');
 	}
 
-	function getDefaultSuffix(count){
-      if ( count > 1 || typeof(count) == "string" ) {
-         return o.pluralSuffix;
-      }
-	}
-
 	function getCountSuffix(options) {
-	   var suffix = ( typeof(o.getSuffixMethod) == "function" ) ? o.getSuffixMethod(options.count) : getDefaultSuffix(options.count);
+	   var suffix = o.getSuffixMethod(options.count);
 	   return ( typeof(suffix) == "string" ) ? suffix : '';
    }
 
