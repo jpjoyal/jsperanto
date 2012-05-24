@@ -109,7 +109,7 @@ Simply use init again and specify a language (or dictionary) to use.
 Custom suffixes
 ==================
 
-At init time specify a method which will calculate the suffic to use if count is present. the argument passed to this method is the count and can be a string or number.
+At init time you can specify a method which will calculate the suffic to use if count is present. the argument passed to this method is the count and can be a string or number.
 Anything other than a string returned will be disregarded.
 
    $.jsperanto.init(someMethod, {
