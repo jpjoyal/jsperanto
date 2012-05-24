@@ -1,11 +1,14 @@
 //jquery 1.3.2 dependencies  : $.each, $.extend, $.ajax
 
 (function($) {
+   
 	//defaults
+	
 	var o = {};
     o.interpolationPrefix = '__';
     o.interpolationSuffix = '__';
-    o.pluralSuffix = "_plural";
+    o.pluralSuffix = '_plural';
+    o.getSuffixMethod = function(count){ return ( count > 1 || typeof(count) == "string" )  ? o.pluralSuffix : ""; };
     o.maxRecursion = 50; //used while applying reuse of strings to avoid infinite loop
     o.reusePrefix = "$t(";
     o.reuseSuffix = ")";
@@ -15,11 +18,12 @@
     o.setDollarT = true; // $.t aliases $.jsperanto.translate, nice shortcut
     o.dictionary = false; // to supply the dictionary instead of loading it using $.ajax. A (big) javascript object containing your namespaced translations
 	o.lang = false; //specify a language to use
-	o.pluralNotFound = ["plural_not_found_", Math.random()].join(''); // used internally by translate
+	o.suffixNotFound = ["suffix_not_found_", Math.random()].join(''); // used internally by translate
 	
 	var dictionary = false; //not yet loaded
 	var currentLang = false;
 	var count_of_replacement = 0;
+
 	
 	function init(callback,options){
 		$.extend(o,options);
@@ -30,7 +34,7 @@
 			callback(translate);
 		});
 	}
-	
+
 	function applyReplacement(string,replacementHash){
 		$.each(replacementHash,function(key,value){
 			string = string.replace([o.interpolationPrefix,key,o.interpolationSuffix].join(''),value);
@@ -59,17 +63,21 @@
 			return o.fallbackLang;
 		}
 	}
-	
-	function needsPlural(options){
-		return (options.count && typeof options.count != 'string' && options.count > 1);
+
+	function containsCount(options){
+	   return (typeof options.count == 'number' || typeof options.count == 'string');
 	}
-	
+
+	function getCountSuffix(options) {
+	   var suffix = o.getSuffixMethod(options.count);
+	   return ( typeof(suffix) == "string" ) ? suffix : '';
+   }
 
 	function translate(dottedkey,options){
 		count_of_replacement = 0;
 		return _translate(dottedkey,options);
 	}
-	
+
 	/*
 	options.defaultValue
 	options.count
@@ -78,14 +86,14 @@
 		options = options || {};
 		var notfound = options.defaultValue || dottedkey;
 		if(!dictionary){return notfound;} // No dictionary to translate from
-		
-		if(needsPlural(options)){
+
+		if(containsCount(options)){
 			var optionsSansCount = $.extend({},options);
 			delete optionsSansCount.count;
-			optionsSansCount.defaultValue = o.pluralNotFound;
-			var pluralKey = dottedkey + o.pluralSuffix;
-			var translated = translate(pluralKey,optionsSansCount);
-			if(translated != o.pluralNotFound){
+			optionsSansCount.defaultValue = o.suffixNotFound;
+			var suffixKey = dottedkey + getCountSuffix(options);
+			var translated = translate(suffixKey,optionsSansCount);
+			if(translated != o.suffixNotFound){
 				return applyReplacement(translated,{count:options.count});//apply replacement for count only
 			}// else continue translation with original/singular key
 		}
@@ -132,7 +140,7 @@
 	function lang(){
 		return currentLang;
 	}
-	
+
 	$.jsperanto = $.jsperanto || {
 		init:init,
 		t:translate,
