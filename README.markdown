@@ -9,6 +9,7 @@ Simple translation for your javascripts, yummy with your favorite templates engi
  * similar to Rails's i18n but sans backend needed
  * No global pollution (hides under jQuery.jsperanto)
  * Works with : IE6+, Firefox 3+, Safari 3+, Chrome, Opera 9+
+ * AMD, CommonJS modules supported
 
 Depends on jQuery 1.3.2+ (uses $.ajax, $.each, $.extend)
 
