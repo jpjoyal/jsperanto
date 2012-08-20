@@ -1,8 +1,19 @@
 //jquery 1.3.2 dependencies  : $.each, $.extend, $.ajax
 
-(function($) {
+// Uses CommonJS, AMD or browser globals to create a jQuery extension.
+(function (factory) {
+    if (typeof exports === 'object') {
+        // Node/CommonJS
+        factory(require('jquery'));
+    } else if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function($) {
    
-    
     var o = {};
     var dictionary = false; //not yet loaded
     var currentLang = false;
@@ -150,4 +161,5 @@
         detectLanguage : detectLanguage,
         lang : lang
     };
-})(jQuery);
+}));
+
