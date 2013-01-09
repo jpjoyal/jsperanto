@@ -1,4 +1,4 @@
-//jquery 1.3.2 dependencies  : $.each, $.extend, $.ajax
+//jquery 1.4 dependencies  : $.each, $.extend, $.ajax, $.isFunction, $.isPlainObject
 
 // Uses CommonJS, AMD or browser globals to create a jQuery extension.
 (function (factory) {
@@ -21,6 +21,9 @@
 
     
     function init(callback,options){
+        options = $.isPlainObject(options) ? options : callback;
+        callback = $.isFunction(callback) ? callback : function(){}; 
+
         $.extend(o,{
             //defaults
             interpolationPrefix : '__',
@@ -40,10 +43,10 @@
             suffixNotFound : ["suffix_not_found_", Math.random()].join('') // used internally by translate
         },options);
         if(!o.lang){o.lang = detectLanguage();}
-        loadDictionary(o.lang,function(loadedLang){
+        return loadDictionary(o.lang,function(loadedLang){
             currentLang = loadedLang;
             if(o.setDollarT){$.t = $.t || translate;} //shortcut
-            callback(translate);
+            if(callback) callback(translate);
         });
     }
 
@@ -132,7 +135,7 @@
             doneCallback(lang);
             return;
         }
-        $.ajax({
+        return $.ajax({
             url: [o.dicoPath,"/", lang, '.json'].join(''),
             success: function(data,status,xhr){
                 dictionary = data;
@@ -162,4 +165,3 @@
         lang : lang
     };
 }));
-
