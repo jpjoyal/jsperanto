@@ -1,4 +1,4 @@
-//jquery 1.3.2 dependencies  : $.each, $.extend, $.ajax
+//jquery 1.4 dependencies  : $.each, $.extend, $.ajax, $.isFunction, $.isPlainObject
 
 // Uses CommonJS, AMD or browser globals to create a jQuery extension.
 (function (factory) {
