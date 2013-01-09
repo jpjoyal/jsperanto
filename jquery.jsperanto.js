@@ -21,6 +21,9 @@
 
     
     function init(callback,options){
+        options = $.isPlainObject(options) ? options : callback;
+        callback = $.isFunction(callback) ? callback : function(){}; 
+
         $.extend(o,{
             //defaults
             interpolationPrefix : '__',
