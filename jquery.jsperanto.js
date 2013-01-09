@@ -40,10 +40,10 @@
             suffixNotFound : ["suffix_not_found_", Math.random()].join('') // used internally by translate
         },options);
         if(!o.lang){o.lang = detectLanguage();}
-        loadDictionary(o.lang,function(loadedLang){
+        return loadDictionary(o.lang,function(loadedLang){
             currentLang = loadedLang;
             if(o.setDollarT){$.t = $.t || translate;} //shortcut
-            callback(translate);
+            if(callback) callback(translate);
         });
     }
 
@@ -132,7 +132,7 @@
             doneCallback(lang);
             return;
         }
-        $.ajax({
+        return $.ajax({
             url: [o.dicoPath,"/", lang, '.json'].join(''),
             success: function(data,status,xhr){
                 dictionary = data;
@@ -162,4 +162,3 @@
         lang : lang
     };
 }));
-
