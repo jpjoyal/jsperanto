@@ -16,6 +16,7 @@
    
     var o = {};
     var dictionary = false; //not yet loaded
+    var fallbackDictionary = false;
     var currentLang = false;
     var count_of_replacement = 0;
 
@@ -120,6 +121,15 @@
             value = value && value[keys[i]];
             i++;
         }
+        if(!value && fallbackDictionary) {
+            // try to find in fallback dictionary
+            value = fallbackDictionary;
+            i = 0;
+            while(keys[i]) {
+                value = value && value[keys[i]];
+                i++;
+            }
+        }
         if(value){
             value = applyReplacement(value,options);
             value = applyReuse(value,options);
@@ -135,22 +145,43 @@
             doneCallback(lang);
             return;
         }
-        return $.ajax({
-            url: [o.dicoPath,"/", lang, '.json'].join(''),
-            success: function(data,status,xhr){
-                dictionary = data;
+        return $.when(
+            $.ajax({
+                url: [o.dicoPath,"/", lang, '.json'].join(''),
+                success: function(data, status, xhr) {
+                    dictionary = data;
+                },
+                async : o.async,
+                dataType: "json"
+            }),
+            $.ajax({
+                url: [o.dicoPath,"/", o.fallbackLang, '.json'].join(''),
+                success: function(data, status, xhr) {
+                    fallbackDictionary = data;
+                },
+                async : o.async,
+                dataType: "json"
+            })
+        ).then(
+            function() {
+                // success from both
                 doneCallback(lang);
             },
-            error : function(xhr,status,error){
-                if(lang != o.fallbackLang){
-                    loadDictionary(o.fallbackLang,doneCallback);
-                }else{
-                    doneCallback(false);
+            function() {
+                // error from one
+                if(!(dictonary || fallbackDictionary))
+                    return doneCallback(false);
+
+                // if lang couldn't be found, fallback
+                if(!dictionary) {
+                    dictionary = fallbackDictionary;
+                    doneCallback(o.fallbackLang);
                 }
-            },
-            async : o.async,
-            dataType: "json"
-        });
+
+                // if fallback lang couldn't be found, whatever
+                doneCallback(lang);
+            }
+        )
     }
     
     function lang(){
