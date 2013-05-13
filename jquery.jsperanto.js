@@ -141,7 +141,7 @@
     
     function loadDictionary(lang,doneCallback){
         if(o.dictionary){
-            dictionary = o.dictionary;
+            dictionary = fallbackDictionary = o.dictionary;
             doneCallback(lang);
             return;
         }
