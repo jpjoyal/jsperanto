@@ -169,7 +169,7 @@
             },
             function() {
                 // error from one
-                if(!(dictonary || fallbackDictionary))
+                if(!(dictionary || fallbackDictionary))
                     return doneCallback(false);
 
                 // if lang couldn't be found, fallback
