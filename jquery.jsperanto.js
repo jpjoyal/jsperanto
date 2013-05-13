@@ -148,19 +148,17 @@
         return $.when(
             $.ajax({
                 url: [o.dicoPath,"/", lang, '.json'].join(''),
-                success: function(data, status, xhr) {
-                    dictionary = data;
-                },
                 async : o.async,
                 dataType: "json"
+            }).done(function(data, status, xhr) {
+                dictionary = data;
             }),
             $.ajax({
                 url: [o.dicoPath,"/", o.fallbackLang, '.json'].join(''),
-                success: function(data, status, xhr) {
-                    fallbackDictionary = data;
-                },
                 async : o.async,
                 dataType: "json"
+            }).done(function(data, status, xhr) {
+                fallbackDictionary = data;
             })
         ).then(
             function() {
