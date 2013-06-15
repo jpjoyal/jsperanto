@@ -58,7 +58,7 @@
     }
     
     function applyReuse(translated,options){
-        while (translated.indexOf && translated.indexOf(o.reusePrefix) != -1){
+        while (translated.indexOf(o.reusePrefix) != -1){
             count_of_replacement++;
             if(count_of_replacement > o.maxRecursion){break;} // safety net for too much recursion
             var index_of_opening = translated.indexOf(o.reusePrefix);
