@@ -33,7 +33,7 @@
             maxRecursion : 50, //used while applying reuse of strings to avoid infinite loop
             reusePrefix : "$t(",
             reuseSuffix : ")",
-            fallbackLang : 'en-US', // see Language fallback section
+            fallbackLang : 'en-us', // see Language fallback section
             dicoPath : 'locales', // see Dictionary section
             async : true, // might be used to force initialization, dictionary loading to be syncronous
             keyseparator : ".", // keys passed to $.jsperanttranslate use this separator
@@ -73,7 +73,7 @@
     
     function detectLanguage(){
         if(navigator){
-            return (navigator.language) ? navigator.language : navigator.userLanguage;
+            return navigator.language && navigator.language.toLocaleLowerCase() || navigator.userLanguage && navigator.userLanguage.toLocaleLowerCase();
         }else{
             return o.fallbackLang;
         }
