@@ -52,11 +52,11 @@
 
     function applyReplacement(string,replacementHash){
         $.each(replacementHash,function(key,value){
-            string = string.replace([o.interpolationPrefix,key,o.interpolationSuffix].join(''),value);
+            string = string.split([o.interpolationPrefix,key,o.interpolationSuffix].join('')).join(value);
         });
         return string;
     }
-    
+
     function applyReuse(translated,options){
         while (translated.indexOf(o.reusePrefix) != -1){
             count_of_replacement++;
