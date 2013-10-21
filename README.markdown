@@ -11,7 +11,7 @@ Simple translation for your javascripts, yummy with your favorite templates engi
  * Works with : IE6+, Firefox 3+, Safari 3+, Chrome, Opera 9+
  * AMD, CommonJS modules supported
 
-Depends on jQuery 1.4+ (uses $.ajax, $.each, $.extend)
+Depends on jQuery 1.5+ (uses $.ajax, $.each, $.extend, $.when, $.then)
 
 Usage example
 =============

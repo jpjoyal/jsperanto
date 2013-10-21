@@ -16,6 +16,7 @@
    
     var o = {};
     var dictionary = false; //not yet loaded
+    var fallbackDictionary = false;
     var currentLang = false;
     var count_of_replacement = 0;
 
@@ -120,6 +121,15 @@
             value = value && value[keys[i]];
             i++;
         }
+        if(!value && fallbackDictionary) {
+            // try to find in fallback dictionary
+            value = fallbackDictionary;
+            i = 0;
+            while(keys[i]) {
+                value = value && value[keys[i]];
+                i++;
+            }
+        }
         if(value){
             value = applyReplacement(value,options);
             value = applyReuse(value,options);
@@ -131,25 +141,49 @@
     
     function loadDictionary(lang,doneCallback){
         if(o.dictionary){
-            dictionary = o.dictionary;
+            dictionary = fallbackDictionary = o.dictionary;
             doneCallback(lang);
             return;
         }
-        return $.ajax({
+
+        // seems complicated to have to define deferred manually rather than 
+        // pass $.ajax's to $.when, but in that case, sometimes the when's 
+        // fail will trigger before both ajax's have finished and will incorrectly 
+        // report the fallback as being not found.
+        var dictDef = $.Deferred()
+        var fallbackDef = $.Deferred()
+        $.when(dictDef, fallbackDef).done(function() {
+            // error from both
+            if(!(dictionary || fallbackDictionary))
+                return doneCallback(false);
+
+            // if lang couldn't be found, fallback
+            if(!dictionary) {
+                dictionary = fallbackDictionary;
+                return doneCallback(o.fallbackLang);
+            }
+
+            // if fallback lang couldn't be found, whatever
+            doneCallback(lang);
+        });
+
+        $.ajax({
             url: [o.dicoPath,"/", lang, '.json'].join(''),
-            success: function(data,status,xhr){
-                dictionary = data;
-                doneCallback(lang);
-            },
-            error : function(xhr,status,error){
-                if(lang != o.fallbackLang){
-                    loadDictionary(o.fallbackLang,doneCallback);
-                }else{
-                    doneCallback(false);
-                }
-            },
             async : o.async,
             dataType: "json"
+        }).done(function(data, status, xhr) {
+            dictionary = data;
+        }).always(function() {
+            dictDef.resolve();
+        });
+        $.ajax({
+            url: [o.dicoPath,"/", o.fallbackLang, '.json'].join(''),
+            async : o.async,
+            dataType: "json"
+        }).done(function(data, status, xhr) {
+            fallbackDictionary = data;
+        }).always(function() {
+            fallbackDef.resolve();
         });
     }
     
